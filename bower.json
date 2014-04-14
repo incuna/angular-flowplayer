@@ -1,0 +1,25 @@
+{
+  "name": "angular-flowplayer",
+  "version": "0.0.1",
+  "homepage": "https://github.com/incuna/angular-flowplayer",
+  "authors": [
+    "Perry Roper <perryroper@gmail.com>"
+  ],
+  "description": "AngularJS directive for Flowplayer",
+  "keywords": [
+    "angularjs",
+    "flowplayer"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.2.0"
+    "angular-sanitize": "~1.2.0",
+  }
+}
