@@ -27,10 +27,6 @@
                         flash: 'application/x-shockwave-flash' in navigator.mimeTypes
                     };
 
-                    if (angular.isDefined(iAttrs.srcset)) {
-                        var sources = JSON.parse(iAttrs.srcset);
-                    }
-
                     if (supports.flash) {
                         var flowplayerParams = {
                             clip: {
