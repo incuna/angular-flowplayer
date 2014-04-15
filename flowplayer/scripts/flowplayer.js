@@ -1,4 +1,4 @@
-(function () {
+(function (angular, navigator) {
     'use strict';
 
     var flowplayerModule = angular.module('flowplayer', [
@@ -57,4 +57,4 @@
             };
         }
     ]);
-}());
+}(window.angular, window.navigator));
