@@ -9,7 +9,7 @@
 
     flowplayerModule.run(['$templateCache', function ($templateCache) {
         $templateCache.put('templates/flowplayer/video.html',
-             '<div><div ng-bind-html="video" ng-show="!poster || playing"></div><img ng-if="poster && !playing" ng-src="{{ poster }}" ng-click="posterClick()"></div>'
+             '<div><div ng-bind-html="video" ng-show="!poster || playing"></div><div class="poster" ng-if="poster && !playing" ng-click="posterClick()"><img ng-src="{{ poster }}"><div class="play-button"></div></div></div>'
         );
     }]);
 
