@@ -20,6 +20,7 @@
                 restrict: 'A',
                 templateUrl: 'templates/flowplayer/video.html',
                 replace: true,
+                scope: true,
                 link: function (scope, iElement, iAttrs) {
                     var SETTINGS = angular.extend({}, FLOWPLAYER, PROJECT_SETTINGS.FLOWPLAYER);
 
