@@ -20,7 +20,13 @@
                 restrict: 'A',
                 templateUrl: 'templates/flowplayer/video.html',
                 replace: true,
-                scope: true,
+                scope: {
+                    flashSrc: '@',
+                    autoplay: '=',
+                    poster: '=',
+                    flashConfig: '=',
+                    config: '='
+                },
                 link: function (scope, iElement, iAttrs) {
                     var SETTINGS = angular.extend({}, FLOWPLAYER, PROJECT_SETTINGS.FLOWPLAYER);
 
@@ -29,24 +35,28 @@
                     };
 
                     if (supports.flash) {
-                        var flowplayerParams = {
+                        var flowplayerConfig = {
                             clip: {
-                                url: iAttrs.flashSrc,
-                                autoPlay: angular.isDefined(iAttrs.autoplay)
+                                url: scope.flashSrc,
+                                autoPlay: scope.autoplay
                             }
                         };
+                        if (angular.isDefined(scope.config)) {
+                            angular.extend(flowplayerConfig, scope.config);
+                        }
 
                         if (angular.isDefined(SETTINGS.COMMERCIAL_KEY)) {
-                            flowplayerParams.key = SETTINGS.COMMERCIAL_KEY;
+                            flowplayerConfig.key = SETTINGS.COMMERCIAL_KEY;
+                        }
+
+                        var flashConfig = {src: SETTINGS.PLAYER_SWF};
+                        if (angular.isDefined(scope.flashConfig)) {
+                            angular.extend(flashConfig, scope.flashConfig);
                         }
 
                         var el = angular.element('<div>');
-                        scope.player = flowplayer(el[0], SETTINGS.PLAYER_SWF, flowplayerParams);
+                        scope.player = flowplayer(el[0], flashConfig, flowplayerConfig);
                         scope.video = $sce.trustAsHtml(el.html());
-
-                        if (angular.isDefined(iAttrs.poster)) {
-                            scope.poster = iAttrs.poster;
-                        }
 
                         scope.posterClick = function () {
                             scope.playing = true;
