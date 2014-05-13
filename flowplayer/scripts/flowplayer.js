@@ -22,8 +22,7 @@
                 replace: true,
                 scope: {
                     flashSrc: '@',
-                    autoplay: '=',
-                    poster: '=',
+                    poster: '@',
                     flashConfig: '=',
                     config: '='
                 },
@@ -38,7 +37,7 @@
                         var flowplayerConfig = {
                             clip: {
                                 url: scope.flashSrc,
-                                autoPlay: scope.autoplay
+                                autoPlay: angular.isDefined(iAttrs.autoplay)
                             }
                         };
                         if (angular.isDefined(scope.config)) {
