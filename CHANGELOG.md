@@ -1,3 +1,7 @@
+# 0.0.4
+* Allow setting of Flowplayer configuration as attributes.
+* Scope attributes are now set explicitly rather than added when checking the passed attributes.
+
 # 0.0.3
 * Pass global vars into anonymous wrapper function to work in strict mode.
 
