@@ -41,6 +41,14 @@
                             clip: {}
                         };
 
+                        if (angular.isUndefined(iAttrs.flashConfigKey)) {
+                            scope.flashConfigKey = 'default';
+                        }
+
+                        if (angular.isUndefined(iAttrs.flowplayerConfigKey)) {
+                            scope.flowplayerConfigKey = 'default';
+                        }
+
                         if (angular.isDefined(scope.flashConfigKey) && angular.isDefined(SETTINGS.FLASH_CONFIG[scope.flashConfigKey])) {
                             angular.extend(flashConfig, SETTINGS.FLASH_CONFIG[scope.flashConfigKey]);
                         }
