@@ -41,19 +41,19 @@
                             clip: {}
                         };
 
-                        if (angular.isUndefined(iAttrs.flashConfigKey)) {
+                        if (angular.isUndefined(scope.flashConfigKey)) {
                             scope.flashConfigKey = 'default';
                         }
 
-                        if (angular.isUndefined(iAttrs.flowplayerConfigKey)) {
+                        if (angular.isUndefined(scope.flowplayerConfigKey)) {
                             scope.flowplayerConfigKey = 'default';
                         }
 
-                        if (angular.isDefined(scope.flashConfigKey) && angular.isDefined(SETTINGS.FLASH_CONFIG[scope.flashConfigKey])) {
+                        if (angular.isDefined(SETTINGS.FLASH_CONFIG[scope.flashConfigKey])) {
                             angular.extend(flashConfig, SETTINGS.FLASH_CONFIG[scope.flashConfigKey]);
                         }
 
-                        if (angular.isDefined(scope.flowplayerConfigKey) && angular.isDefined(SETTINGS.FLOWPLAYER_CONFIG[scope.flowplayerConfigKey])) {
+                        if (angular.isDefined(SETTINGS.FLOWPLAYER_CONFIG[scope.flowplayerConfigKey])) {
                             angular.extend(flowplayerConfig, SETTINGS.FLASH_CONFIG[scope.flowplayerConfigKey]);
                         }
 
@@ -86,11 +86,13 @@
                                 iElement.contents().replaceWith($compile($templateCache.get('templates/flowplayer/video.html'))(scope));
                             }
 
-                            // Add all clips to flowplayer.
-                            var clips = [].concat(newVal);
-                            angular.forEach(clips, function (clip, index) {
-                                player.addClip(clip, index);
-                            });
+                            if (angular.isDefined(iAttrs.clip)) {
+                                // Add all clips to flowplayer.
+                                var clips = [].concat(newVal);
+                                angular.forEach(clips, function (clip, index) {
+                                    player.addClip(clip, index);
+                                });
+                            }
                         }, true);
 
                         scope.play = function () {
