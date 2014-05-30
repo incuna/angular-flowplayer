@@ -83,7 +83,7 @@
                                 var el = angular.element('<div>');
                                 player = flowplayer(el[0], flashConfig, flowplayerConfig);
                                 scope.video = $sce.trustAsHtml(el.html());
-                                iElement.replaceWith($compile($templateCache.get('templates/flowplayer/video.html'))(scope));
+                                iElement.contents().replaceWith($compile($templateCache.get('templates/flowplayer/video.html'))(scope));
                             }
 
                             // Add all clips to flowplayer.
