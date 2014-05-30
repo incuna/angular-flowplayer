@@ -41,11 +41,12 @@
                             clip: {}
                         };
 
-                        if (angular.isUndefined(scope.flashConfigKey)) {
+                        if (angular.isUndefined(iAttrs.flashConfigKey)) {
+                            console.log('undefined')
                             scope.flashConfigKey = 'default';
                         }
 
-                        if (angular.isUndefined(scope.flowplayerConfigKey)) {
+                        if (angular.isUndefined(iAttrs.flowplayerConfigKey)) {
                             scope.flowplayerConfigKey = 'default';
                         }
 
