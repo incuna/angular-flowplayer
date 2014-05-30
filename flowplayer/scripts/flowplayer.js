@@ -5,26 +5,27 @@
         'ngSanitize'
     ]);
 
-    flowplayerModule.constant('FLOWPLAYER', {});
+    flowplayerModule.constant('FLOWPLAYER', {
+        FLASH_CONFIG: {},
+        FLOWPLAYER_CONFIG: {}
+    });
 
     flowplayerModule.run(['$templateCache', function ($templateCache) {
         $templateCache.put('templates/flowplayer/video.html',
-             '<div><div ng-bind-html="video" ng-show="!poster || playing"></div><img ng-if="poster && !playing" ng-src="{{ poster }}" ng-click="posterClick()"></div>'
+             '<div><div ng-bind-html="video" ng-show="!poster || playing"></div><img ng-if="poster && !playing" ng-src="{{ poster }}" ng-click="play()"></div>'
         );
     }]);
 
     flowplayerModule.directive('flowplayer', [
-        '$sce', 'FLOWPLAYER', 'PROJECT_SETTINGS',
-        function ($sce, FLOWPLAYER, PROJECT_SETTINGS) {
+        '$compile', '$sce', '$templateCache', 'FLOWPLAYER', 'PROJECT_SETTINGS',
+        function ($compile, $sce, $templateCache, FLOWPLAYER, PROJECT_SETTINGS) {
             return {
                 restrict: 'A',
-                templateUrl: 'templates/flowplayer/video.html',
-                replace: true,
                 scope: {
-                    flashSrc: '@',
+                    clip: '@',
                     poster: '@',
-                    flashConfig: '=',
-                    config: '='
+                    flowplayerConfigKey: '&',
+                    flashConfigKey: '&'
                 },
                 link: function (scope, iElement, iAttrs) {
                     var SETTINGS = angular.extend({}, FLOWPLAYER, PROJECT_SETTINGS.FLOWPLAYER);
@@ -34,32 +35,59 @@
                     };
 
                     if (supports.flash) {
+                        var player;
+                        var flashConfig = {};
                         var flowplayerConfig = {
-                            clip: {
-                                url: scope.flashSrc,
-                                autoPlay: angular.isDefined(iAttrs.autoplay)
-                            }
+                            clip: {}
                         };
-                        if (angular.isDefined(scope.config)) {
-                            angular.extend(flowplayerConfig, scope.config);
+
+                        if (angular.isDefined(scope.flashConfigKey) && angular.isDefined(SETTINGS.FLASH_CONFIG[scope.flashConfigKey])) {
+                            angular.extend(flashConfig, SETTINGS.FLASH_CONFIG[scope.flashConfigKey]);
                         }
 
-                        if (angular.isDefined(SETTINGS.COMMERCIAL_KEY)) {
-                            flowplayerConfig.key = SETTINGS.COMMERCIAL_KEY;
+                        if (angular.isDefined(scope.flowplayerConfigKey) && angular.isDefined(SETTINGS.FLOWPLAYER_CONFIG[scope.flowplayerConfigKey])) {
+                            angular.extend(flowplayerConfig, SETTINGS.FLASH_CONFIG[scope.flowplayerConfigKey]);
                         }
 
-                        var flashConfig = {src: SETTINGS.PLAYER_SWF};
-                        if (angular.isDefined(scope.flashConfig)) {
-                            angular.extend(flashConfig, scope.flashConfig);
+                        // A dictionary of sources information.
+                        var sources = _.map(iElement.find('source'), function (source) {
+                            return {
+                                src: source.getAttribute('src'),
+                                type: source.getAttribute('type')
+                            };
+                        });
+
+                        // We need to use the `.mp4` file for flowplayer.
+                        var mp4Source = _.find(sources, function (source) {
+                            return source.src.split('.').pop() === 'mp4';
+                        });
+
+                        if (angular.isDefined(mp4Source.src)) {
+                            angular.extend(flowplayerConfig.clip, {
+                                url: mp4Source.src,
+                                autoPlay: angular.isDefined(iAttrs.autoplay)
+                            });
                         }
 
-                        var el = angular.element('<div>');
-                        scope.player = flowplayer(el[0], flashConfig, flowplayerConfig);
-                        scope.video = $sce.trustAsHtml(el.html());
+                        scope.$watch('clip', function (newVal, oldVal) {
+                            // Initialise flowplayer.
+                            if (angular.isUndefined(player)) {
+                                var el = angular.element('<div>');
+                                player = flowplayer(el[0], flashConfig, flowplayerConfig);
+                                scope.video = $sce.trustAsHtml(el.html());
+                                iElement.replaceWith($compile($templateCache.get('templates/flowplayer/video.html'))(scope));
+                            }
 
-                        scope.posterClick = function () {
+                            // Add all clips to flowplayer.
+                            var clips = [].concat(newVal);
+                            angular.forEach(clips, function (clip, index) {
+                                player.addClip(clip, index);
+                            });
+                        }, true);
+
+                        scope.play = function () {
                             scope.playing = true;
-                            scope.player.play();
+                            player.play();
                         };
                     }
                 }
