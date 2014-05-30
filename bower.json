@@ -1,6 +1,6 @@
 {
   "name": "angular-flowplayer",
-  "version": "0.0.5",
+  "version": "1.0.0",
   "homepage": "https://github.com/incuna/angular-flowplayer",
   "authors": [
     "Perry Roper <perryroper@gmail.com>"
@@ -20,6 +20,7 @@
   ],
   "dependencies": {
     "angular": "~1.2",
-    "angular-sanitize": "~1.2"
+    "angular-sanitize": "~1.2",
+    "lodash": "~2.4"
   }
 }

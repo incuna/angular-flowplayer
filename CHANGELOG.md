@@ -1,3 +1,9 @@
+# 1.0.0
+
+* Clips can now be configured dynamically.
+* The player can be initialised with a full set of options from the settings.
+* Fixed an issue where the player would not fall back to HTML5 video if supported.
+
 # 0.0.5
 
 * Improve dependency matching in `bower.json` to reduce conflicts.
