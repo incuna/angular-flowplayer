@@ -12,7 +12,7 @@
 
     flowplayerModule.run(['$templateCache', function ($templateCache) {
         $templateCache.put('templates/flowplayer/video.html',
-             '<div><div ng-bind-html="video" ng-show="!poster || playing"></div><img ng-if="poster && !playing" ng-src="{{ poster }}" ng-click="play()"></div>'
+             '<a ng-href="url" ng-show="url" ><img ng-show="poster" ng-src="{{ poster }}" ></a>'
         );
     }]);
 
@@ -22,10 +22,10 @@
             return {
                 restrict: 'A',
                 scope: {
-                    clip: '@',
+                    clip: '=',
                     poster: '@',
-                    flowplayerConfigKey: '&',
-                    flashConfigKey: '&'
+                    flowplayerConfigKey: '@',
+                    flashConfigKey: '@'
                 },
                 link: function (scope, iElement, iAttrs) {
                     var SETTINGS = angular.extend({}, FLOWPLAYER, PROJECT_SETTINGS.FLOWPLAYER);
@@ -35,14 +35,16 @@
                     };
 
                     if (supports.flash) {
-                        var player;
                         var flashConfig = {};
-                        var flowplayerConfig = {
-                            clip: {}
-                        };
+                        var flowplayerConfig = {};
+
+                        var setClip = function (clip) {
+                            // Using `update` as neither `player.addClip()` nor `player.setClip()` worked
+                            player.getClip(0).update(clip);
+                            scope.url = clip.url;
+                        }
 
                         if (angular.isUndefined(iAttrs.flashConfigKey)) {
-                            console.log('undefined')
                             scope.flashConfigKey = 'default';
                         }
 
@@ -55,7 +57,7 @@
                         }
 
                         if (angular.isDefined(SETTINGS.FLOWPLAYER_CONFIG[scope.flowplayerConfigKey])) {
-                            angular.extend(flowplayerConfig, SETTINGS.FLASH_CONFIG[scope.flowplayerConfigKey]);
+                            angular.extend(flowplayerConfig, SETTINGS.FLOWPLAYER_CONFIG[scope.flowplayerConfigKey]);
                         }
 
                         // A dictionary of sources information.
@@ -71,35 +73,24 @@
                             return source.src.split('.').pop() === 'mp4';
                         });
 
-                        if (angular.isDefined(mp4Source.src)) {
-                            angular.extend(flowplayerConfig.clip, {
-                                url: mp4Source.src,
-                                autoPlay: angular.isDefined(iAttrs.autoplay)
-                            });
-                        }
+
+                        // Initialise flowplayer.
+                        iElement.contents().replaceWith($compile($templateCache.get('templates/flowplayer/video.html'))(scope));
+                        var player = flowplayer(iElement[0], flashConfig, flowplayerConfig);
 
                         scope.$watch('clip', function (newVal, oldVal) {
-                            // Initialise flowplayer.
-                            if (angular.isUndefined(player)) {
-                                var el = angular.element('<div>');
-                                player = flowplayer(el[0], flashConfig, flowplayerConfig);
-                                scope.video = $sce.trustAsHtml(el.html());
-                                iElement.contents().replaceWith($compile($templateCache.get('templates/flowplayer/video.html'))(scope));
-                            }
-
-                            if (angular.isDefined(iAttrs.clip)) {
-                                // Add all clips to flowplayer.
-                                var clips = [].concat(newVal);
-                                angular.forEach(clips, function (clip, index) {
-                                    player.addClip(clip, index);
-                                });
+                            if (angular.isDefined(newVal)) {
+                                // Using `update` as neither `player.addClip()` nor `player.setClip()` worked
+                                setClip(newVal);
                             }
                         }, true);
 
-                        scope.play = function () {
-                            scope.playing = true;
-                            player.play();
-                        };
+                        if (angular.isUndefined(scope.clip) && angular.isDefined(mp4Source) && angular.isDefined(mp4Source.src)) {
+                            setClip({
+                                url: mp4Source.src
+                            });
+                        }
+
                     }
                 }
             };
