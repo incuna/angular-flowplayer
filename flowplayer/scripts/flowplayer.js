@@ -42,7 +42,6 @@
                         };
 
                         if (angular.isUndefined(iAttrs.flashConfigKey)) {
-                            console.log('undefined')
                             scope.flashConfigKey = 'default';
                         }
 
@@ -78,6 +77,16 @@
                             });
                         }
 
+                        // Define events for all clips.
+                        angular.extend(flowplayerConfig.clip, {
+                            onFinish: function () {
+                                scope.stop();
+                            },
+                            onStop: function () {
+                                scope.stop();
+                            }
+                        });
+
                         scope.$watch('clip', function (newVal, oldVal) {
                             // Initialise flowplayer.
                             if (angular.isUndefined(player)) {
@@ -97,8 +106,16 @@
                         }, true);
 
                         scope.play = function () {
+                            flowplayer('*').each(function () {
+                                this.stop();
+                            });
                             scope.playing = true;
                             player.play();
+                        };
+
+                        scope.stop = function () {
+                            player.stop();
+                            scope.playing = false;
                         };
                     }
                 }
