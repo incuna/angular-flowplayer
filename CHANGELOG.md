@@ -1,3 +1,9 @@
+# 1.0.1
+
+* Fix issues specifying clip dynamically.
+* Fix initialisation options issues.
+* Make mp4 source not required.
+
 # 1.0.0
 
 * Clips can now be configured dynamically.
