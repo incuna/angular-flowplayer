@@ -1,3 +1,11 @@
+# 1.0.2
+
+* The template is now compiled once, outside of the linking function.
+* Fixed an issue with angular.extend where it was joining objects between
+  directives.
+* Flowplayer is initialised inside a $timeout function so that the HTML it uses
+  has already been bound to the scope.
+
 # 1.0.1
 
 * Fix issues specifying clip dynamically.
