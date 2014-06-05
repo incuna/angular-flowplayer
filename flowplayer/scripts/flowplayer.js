@@ -67,6 +67,10 @@
                                 angular.extend(flowplayerConfig, angular.copy(SETTINGS.FLOWPLAYER_CONFIG[scope.flowplayerConfigKey]));
                             }
 
+                            flowplayerConfig.onFinish = function () {
+                                this.unload();
+                            };
+
                             // A dictionary of sources information.
                             var sources = _.map(iElement.find('source'), function (source) {
                                 return {
