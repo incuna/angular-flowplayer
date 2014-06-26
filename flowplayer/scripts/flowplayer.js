@@ -75,9 +75,23 @@
                                 };
                             });
 
+                            var tracks = _.map(iElement.find('track'), function (source) {
+                                return {
+                                    src: source.getAttribute('src'),
+                                    kind: source.getAttribute('kind'),
+                                    label: source.getAttribute('label'),
+                                    srclang: source.getAttribute('srclang')
+                                };
+                            });
+
                             // We need to use the `.mp4` file for flowplayer.
                             var mp4Source = _.find(sources, function (source) {
                                 return source.src.split('.').pop() === 'mp4';
+                            });
+
+
+                            var captions = _.find(tracks, function (track) {
+                                return track.kind === 'captions';
                             });
 
                             compiled(scope, function (clonedElement, scope) {
@@ -92,9 +106,13 @@
                             }, true);
 
                             if (angular.isUndefined(scope.clip) && angular.isDefined(mp4Source) && angular.isDefined(mp4Source.src)) {
-                                setClip({
+                                var clip = {
                                     url: mp4Source.src
-                                });
+                                };
+                                if (captions && captions.src) {
+                                    clip.captionUrl = captions.src;
+                                }
+                                setClip(clip);
                             }
                         };
                     }
