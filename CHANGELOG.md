@@ -1,3 +1,7 @@
+# 1.1.0
+
+* Set the clip's captionUrl based on the first captions track element.
+
 # 1.0.2
 
 * The template is now compiled once, outside of the linking function.
