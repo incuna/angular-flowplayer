@@ -1,3 +1,8 @@
+# 1.2.0
+
+* Improve flash support test for IE.
+* Provide supportsFlash factory to test flash support.
+
 # 1.1.0
 
 * Set the clip's captionUrl based on the first captions track element.

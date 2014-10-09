@@ -16,11 +16,41 @@
         );
     }]);
 
+    flowplayerModule.factory('supportsFlash', [
+        function () {
+            if (navigator.plugins && navigator.plugins.length > 0) {
+                var type = 'application/x-shockwave-flash';
+                var mimeTypes = navigator.mimeTypes;
+                return (mimeTypes && 
+                        mimeTypes[type] && 
+                        mimeTypes[type].enabledPlugin && 
+                        mimeTypes[type].enabledPlugin.description && 1);
+            } else {
+                var flashObj = null;
+                try { 
+                    flashObj = new ActiveXObject('ShockwaveFlash.ShockwaveFlash'); 
+                } catch (ex) { 
+                    return false; 
+                }
+                if (flashObj !== null) {
+                    try { 
+                        if (flashObj.GetVariable('$version')) {
+                            return true;
+                        }
+                    } catch (err) { 
+                        return false; 
+                    }
+                }
+            }
+            return false;
+        }
+    ]);
+
     flowplayerModule.directive('flowplayer', [
-        '$compile', '$sce', '$timeout', '$templateCache', 'FLOWPLAYER', 'PROJECT_SETTINGS',
-        function ($compile, $sce, $timeout, $templateCache, FLOWPLAYER, PROJECT_SETTINGS) {
+        'supportsFlash', '$compile', '$sce', '$timeout', '$templateCache', 'FLOWPLAYER', 'PROJECT_SETTINGS',
+        function (supportsFlash, $compile, $sce, $timeout, $templateCache, FLOWPLAYER, PROJECT_SETTINGS) {
             var supports = {
-                flash: 'application/x-shockwave-flash' in navigator.mimeTypes
+                flash: supportsFlash
             };
 
             return {
