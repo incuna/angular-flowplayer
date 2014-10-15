@@ -125,7 +125,7 @@
                             });
 
                             compiled(scope, function (clonedElement, scope) {
-                                iElement.contents().replaceWith(clonedElement);
+                                iElement.html(clonedElement);
                             });
 
                             scope.$watch('clip', function (newVal, oldVal) {
