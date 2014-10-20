@@ -21,24 +21,24 @@
             if (navigator.plugins && navigator.plugins.length > 0) {
                 var type = 'application/x-shockwave-flash';
                 var mimeTypes = navigator.mimeTypes;
-                return (mimeTypes && 
-                        mimeTypes[type] && 
-                        mimeTypes[type].enabledPlugin && 
+                return (mimeTypes &&
+                        mimeTypes[type] &&
+                        mimeTypes[type].enabledPlugin &&
                         mimeTypes[type].enabledPlugin.description && 1);
             } else {
                 var flashObj = null;
-                try { 
-                    flashObj = new ActiveXObject('ShockwaveFlash.ShockwaveFlash'); 
-                } catch (ex) { 
-                    return false; 
+                try {
+                    flashObj = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
+                } catch (ex) {
+                    return false;
                 }
                 if (flashObj !== null) {
-                    try { 
+                    try {
                         if (flashObj.GetVariable('$version')) {
                             return true;
                         }
-                    } catch (err) { 
-                        return false; 
+                    } catch (err) {
+                        return false;
                     }
                 }
             }
@@ -125,7 +125,7 @@
                             });
 
                             compiled(scope, function (clonedElement, scope) {
-                                iElement.contents().replaceWith(clonedElement);
+                                iElement.html(clonedElement);
                             });
 
                             scope.$watch('clip', function (newVal, oldVal) {

@@ -1,3 +1,9 @@
+# 1.2.1
+
+* We now replace the contents of the `flowplayer` directive with `.html(compiled)`
+  rather than `.contents().replaceWith(compiled)`, as `.contents()` could return
+  more than one element, resulting in multiple replacements.
+
 # 1.2.0
 
 * Improve flash support test for IE.
