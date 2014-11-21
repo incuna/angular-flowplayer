@@ -12,7 +12,12 @@
 
     flowplayerModule.run(['$templateCache', function ($templateCache) {
         $templateCache.put('templates/flowplayer/video.html',
-             '<a ng-href="url" ng-show="url" ><img ng-show="poster" ng-src="{{ poster }}" ></a>'
+            '<div class="poster" ng-show="url">' +
+            '    <a ng-href="{{ url }}">' +
+            '        <img ng-src="{{ poster }}">' +
+            '        <div class="play-button">' +
+            '    </a>' +
+            '</div>'
         );
     }]);
 
