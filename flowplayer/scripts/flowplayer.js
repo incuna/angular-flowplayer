@@ -125,7 +125,13 @@
                             });
 
                             compiled(scope, function (clonedElement, scope) {
-                                iElement.html(clonedElement);
+                                // Replace the contents with a single element.
+                                // If iElement had more than 1 child then
+                                // .contents().replaceWith() would replace
+                                // each child with clonedElement, resulting
+                                // in multiple videos on the page.
+                                iElement.html('<div></div>');
+                                iElement.contents().replaceWith(clonedElement);
                             });
 
                             scope.$watch('clip', function (newVal, oldVal) {
