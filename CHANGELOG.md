@@ -1,3 +1,7 @@
+# 1.2.2
+
+ * Fix issue introduced in 1.2.1 where a jQuery dependency was required.
+
 # 1.2.1
 
 * We now replace the contents of the `flowplayer` directive with `.html(compiled)`
