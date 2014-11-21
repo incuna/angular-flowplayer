@@ -1,3 +1,9 @@
+# 1.3.0
+
+* Improved the base template.
+* Flowplayer now unloads when the video finishes, reverting back to
+  the poster state.
+
 # 1.2.2
 
  * Fix issue introduced in 1.2.1 where a jQuery dependency was required.
