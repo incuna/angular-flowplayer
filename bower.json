@@ -19,8 +19,8 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "~1.2",
-    "angular-sanitize": "~1.2",
-    "lodash": "~2.4"
+    "angular-route": "1.2 - 1.5",
+    "angular-sanitize": "1.2 - 1.5",
+    "lodash": "2.4 - 4"
   }
 }
