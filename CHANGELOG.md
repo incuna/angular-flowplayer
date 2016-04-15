@@ -1,4 +1,4 @@
-# Upcoming
+# 1.3.1
 
 * Upgrade Angular compatibility to include 1.3, 1.4 and 1.5.
 * Upgrade Angular-sanitize compatibility to include 1.3, 1.4 and 1.5.
